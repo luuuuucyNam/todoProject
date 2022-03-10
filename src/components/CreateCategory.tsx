@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { categoriesState, categoryState, toDoState } from "./atoms";
 
 interface IForm {
-  toDo: string;
+  category: string;
 }
 
 const ToDoInput = styled.input`
@@ -12,6 +12,7 @@ const ToDoInput = styled.input`
   width: 20vw;
   padding: 0.8em 0.5em;
   margin-right: 0.8em;
+  margin-top: 1em;
 `;
 
 const AddBtn = styled.button`
@@ -31,27 +32,26 @@ const AddBtn = styled.button`
   }
 `;
 
-function CreateToDo() {
-  const setToDos = useSetRecoilState(toDoState);
-  const category = useRecoilValue(categoryState);
+function CreateCategory() {
+  const setCategory = useSetRecoilState(categoriesState);
   const { register, handleSubmit, setValue } = useForm<IForm>();
-  const handleValid = ({ toDo }: IForm) => {
-    setToDos((oldToDos) => {
-      const toDoArr = [{ text: toDo, id: Date.now(), category }, ...oldToDos];
-      localStorage.setItem("todos", JSON.stringify(toDoArr));
-      return toDoArr;
+  const handleValid = ({ category }: IForm) => {
+    setCategory((oldCategory) => {
+      const categoryArr = [category, ...oldCategory];
+      localStorage.setItem("categories", JSON.stringify(categoryArr));
+      return categoryArr;
     });
-    setValue("toDo", "");
+    setValue("category", "");
   };
   return (
     <form onSubmit={handleSubmit(handleValid)}>
       <ToDoInput
-        {...register("toDo", { required: "Please write a To Do" })}
-        placeholder="Write a to do"
+        {...register("category", { required: "Please write a Category" })}
+        placeholder="Write a Category"
       />
       <AddBtn>+</AddBtn>
     </form>
   );
 }
 
-export default CreateToDo;
+export default CreateCategory;

@@ -9,12 +9,27 @@ export enum Categories {
 export interface IToDo {
   text: string;
   id: number;
-  category: Categories;
+  category: string;
 }
 
-export const categoryState = atom<Categories>({
+// export interface ICategory {
+//   name: string;
+//   id: number;
+//   value: string;
+// }
+
+export const categoryState = atom<string>({
   key: "category",
-  default: Categories.TO_DO,
+  default: "TO_DO",
+});
+
+export const categoriesState = atom<string[]>({
+  key: "categories",
+  default: JSON.parse(localStorage.getItem("categories") as any) || [
+    "TO_DO",
+    "DOING",
+    "DONE",
+  ],
 });
 
 export const toDoState = atom<IToDo[]>({
